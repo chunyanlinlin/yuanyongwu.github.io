@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+	<!--内联事件注册方式-->
+	<body onload="setUp()">
+		<select id="pro"></select>
+		<select id="city"></select>
+	</body>
+	<script>
+		var provinces=["北京市","上海市","河南省"];
+		//provinces[1]--cities[1]  json []  {}  
+		var  cities=[];
+		//数组里面放数组 [[0,2,"a"],[1,5,"b"]]  json数组，也叫做二维数组
+		cities[0]=["海淀区","朝阳区","崇明区"];//provinces[0](北京)对应的区
+		cities[1]=["徐汇区","浦东新区","虹口区","闵行区"];
+		cities[2]=["郑州市","商丘市"];
+		//传统事件注册方式
+		/*
+		window.onload=function(){
+			alert(1);
+		}
+		*/
+		//内联事件注册方式:把事件句柄直接写在html标签上
+		function setUp(){
+			//得到省下拉框
+			/**
+			 * <select>
+			 * 		<option>文字</option>
+			 * </select>
+			 */
+			 var pro=document.getElementById("pro");
+			 //创建省的option标签
+			 for(var i=0;i<provinces.length;i++){
+			 	 var optionEle=document.createElement("option");
+			 	 optionEle.setAttribute("value",i);
+			 	 var optionTxt=document.createTextNode(provinces[i]);
+			 	 optionEle.appendChild(optionTxt);
+			 	 //把创建好的option标签附加到已经存在select上面去
+			 	 pro.appendChild(optionEle);
+			 }
+			
+			//创建市下拉select
+			var city=document.getElementById("city");
+			 //创建省的option标签
+			  var arr0= cities[0];
+			 for(var i=0;i<arr0.length;i++){//["海淀区","朝阳区","崇明区"]
+			 	 var optionEle=document.createElement("option");
+			 	 var optionTxt=document.createTextNode(arr0[i]);
+			 	 optionEle.appendChild(optionTxt);
+			 	 //把创建好的option标签附加到已经存在select上面去
+			 	 city.appendChild(optionEle);
+			 }
+			 /*
+			 pro.onchange=function (){
+			 	
+			 }*/
+			 pro.onchange=changeCity;
+		}
+		
+		function changeCity(){
+			//删除掉原来已经存在的option
+			var city=document.getElementById("city");
+			var options=city.getElementsByTagName("option");
+			//console.log(options);
+			//长度一直在变，导致删除不干净
+			 //for(var i=0;i<options.length;i++){
+			 	//city.removeChild(options[i]);
+			 //}
+			 for(var i=options.length-1;i>=0;i--){
+			 	city.removeChild(options[i]);
+			 }
+			 //添加:this  :<select id="pro"></select>
+			 //得到选择的是第几个省
+			 var selectedProIndex= this.value; 
+			 var selectedProIndex_cityArr= cities[selectedProIndex];
+			 console.log(selectedProIndex_cityArr);
+			 for(var i=0;i<selectedProIndex_cityArr.length;i++){
+			 	 var optionEle=document.createElement("option");
+			 	 var optionTxt=document.createTextNode(selectedProIndex_cityArr[i]);
+			 	 optionEle.appendChild(optionTxt);
+			 	 city.appendChild(optionEle);
+			 }
+			 
+		}
+		
+	</script>
+</html>
